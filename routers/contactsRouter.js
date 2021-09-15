@@ -66,7 +66,7 @@ router.route("/:id")
 
 // sur Postman contacts/name?name=${name}
 router.route("/name")
-    .get(async (_req, res) => {
+    .get(async (req, res) => {
         try {
             const data = await Contact.aggregate([
                 {
@@ -77,7 +77,7 @@ router.route("/name")
             res.status(200).json({
                 data,
             });
-        } catch (error) { // Je ne rentre pas dans les catch
+        } catch (error) {
             return res.status(404).json({
                 message: "Page not found"
             });
@@ -89,14 +89,14 @@ router.route("/category")
         try {
             const data = await Contact.aggregate([
                 {
-                    $match: { category: 2 },
+                    $match: { category: req.params.category },
                 },
             ]);
 
             res.status(200).json({
                 data,
             })
-        } catch (error) { // Je ne rentre pas dans les catchs
+        } catch (error) {
             return res.status(404).json({
                 message: "Page not found"
             });
