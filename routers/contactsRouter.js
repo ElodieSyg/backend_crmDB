@@ -64,7 +64,6 @@ router.route("/:id")
         });
     });
 
-// sur Postman contacts/name?name=${name}
 router.route("/name")
     .get(async (req, res) => {
         try {
@@ -89,16 +88,35 @@ router.route("/category")
         try {
             const data = await Contact.aggregate([
                 {
-                    $match: { category: req.params.category },
+                    $match: { category: { $eq: req.query.category } },
+                },
+            ]);
+
+            res.status(200).json({
+                data: data,
+            })
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found"
+            });
+        };
+    });
+
+router.route("/email")
+    .get(async (req, res) => {
+        try {
+            const data = await Contact.aggregate([
+                {
+                    $match: { email: req.query.email }
                 },
             ]);
 
             res.status(200).json({
                 data,
-            })
+            });
         } catch (error) {
             return res.status(404).json({
-                message: "Page not found"
+                message: "Page not  found",
             });
         };
     });
