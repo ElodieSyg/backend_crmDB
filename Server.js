@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const debug = require("./middlewares/debug");
 // Import routers
 const registerRouter = require("./routers/registerRouter");
+const loginRouter = require("./routers/loginRouter");
 
 // MongoDB connection
 mongoose
@@ -23,7 +24,7 @@ mongoose
 app.use(express.json());
 app.use(debug);
 app.use("/register", registerRouter);
-// "/login"
+app.use("/login", loginRouter);
 // "/contacts"
 
 // Starting server
