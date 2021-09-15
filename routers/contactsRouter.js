@@ -15,27 +15,24 @@ router.route("/")
     .post(async (req, res) => {
         const { userId, name, email, description, category } = req.body;
 
-        try {
-            await Contact.create({ userId, name, email, description, category });
-        } catch (error) {
-            return res.status(400).json({
-                message: "This contact already exist",
-            });
-            /* if (Contact.ContactSchema.category > 6) {  // Check la confition category > 6
+        if (category >= 1 && category <= 5) {
+            try {
+                await Contact.create({ userId, name, email, description, category });
+            } catch (error) {
                 return res.json({
-                    message: "Incorrect category",
+                    message: "Email is already use",
                 });
-            } else {
-                return res.status(400).json({
-                    message: "This contact already exist",
-                });
-            }; */
+            };
+        } else {
+            return res.status(400).json({
+                message: "Category incorrect",
+            });
         };
 
         res.status(201).json({
             message: `${name} was added to your contact book`,
         });
-    })
+    });
 
 router.route("/:id")
     .put(async (req, res) => {
@@ -67,12 +64,13 @@ router.route("/:id")
         });
     });
 
+// sur Postman contacts/name?name=${name}
 router.route("/name")
     .get(async (_req, res) => {
         try {
             const data = await Contact.aggregate([
                 {
-                    $match: { name: "Eleonora" },
+                    $match: { name: req.params.name },
                 },
             ]);
 
