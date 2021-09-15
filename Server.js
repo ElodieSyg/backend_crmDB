@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 // Import middlewares
 const debug = require("./middlewares/debug");
 // Import routers
+const registerRouter = require("./routers/registerRouter");
 
 // MongoDB connection
 mongoose
@@ -21,7 +22,7 @@ mongoose
 // Middlewares
 app.use(express.json());
 app.use(debug);
-// "/register"
+app.use("/register", registerRouter);
 // "/login"
 // "/contacts"
 
