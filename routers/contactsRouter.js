@@ -21,6 +21,15 @@ router.route("/")
             return res.status(400).json({
                 message: "This contact already exist",
             });
+            /* if (Contact.ContactSchema.category > 6) {  // Check la confition category > 6
+                return res.json({
+                    message: "Incorrect category",
+                });
+            } else {
+                return res.status(400).json({
+                    message: "This contact already exist",
+                });
+            }; */
         };
 
         res.status(201).json({
@@ -56,6 +65,44 @@ router.route("/:id")
         res.status(200).json({
             message: "User was delete",
         });
+    });
+
+router.route("/name")
+    .get(async (_req, res) => {
+        try {
+            const data = await Contact.aggregate([
+                {
+                    $match: { name: "Eleonora" },
+                },
+            ]);
+
+            res.status(200).json({
+                data,
+            });
+        } catch (error) { // Je ne rentre pas dans les catch
+            return res.status(404).json({
+                message: "Page not found"
+            });
+        };
+    });
+
+router.route("/category")
+    .get(async (req, res) => {
+        try {
+            const data = await Contact.aggregate([
+                {
+                    $match: { category: 2 },
+                },
+            ]);
+
+            res.status(200).json({
+                data,
+            })
+        } catch (error) { // Je ne rentre pas dans les catchs
+            return res.status(404).json({
+                message: "Page not found"
+            });
+        };
     });
 
 module.exports = router;
