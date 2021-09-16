@@ -5,17 +5,27 @@ const router = express.Router();
 const User = require("../models/usersModel");
 
 router.route("/")
-    .post(async (req, res) => {
+    .post(async (req, res) => { // Add an user in database
         const { email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 12);
 
-        try {
-            await User.create({ email, password: hashedPassword });
-        } catch (error) {
+        const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+        const passwordRegex = new RegExp(/[0-9a-zA-Z]{8,}/);
+
+        if (emailRegex.test(email) && passwordRegex.test(password)) {
+            try {
+                await User.create({ email, password: hashedPassword });
+            } catch (error) {
+                return res.status(400).json({
+                    message: "This user already exist",
+                });
+            };
+        } else {
             return res.status(400).json({
-                message: "This user already exist",
+                message: "Incorrect email or password !"
             });
         };
+
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         res.status(201).json({
             message: `User created with email: ${email}`,

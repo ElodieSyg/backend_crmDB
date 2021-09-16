@@ -68,19 +68,18 @@ router.route("/:id")
 router.route("/name")
     .get(async (req, res) => {
         try {
-            const name = req.query.name
-
-            const data = await Contact.aggregate([
+            const data = { name: "Etienne" };
+            const complet = data.name.substring(0, 1).toLocaleLowerCase() + data.name.substring(1)
+            const match = await Contact.aggregate([
                 {
-                    $match: { name: { $eq: name } },
+                    $match: { name: complet },
                 },
             ]);
 
-
-            console.log(req.query.name, data)
+            console.log(match)
 
             res.status(200).json({
-                data,
+                data: data,
             });
         } catch (error) {
             return res.status(404).json({
@@ -97,7 +96,7 @@ router.route("/category")
             const data = await Contact.aggregate([
                 {
                     $match: {
-                        category: { $eq: categoryNumber }, // Problème avec le req.query.category
+                        category: { $eq: categoryNumber },
                     },
                 }
             ]);
