@@ -64,6 +64,7 @@ router.route("/:id")
         });
     });
 
+// Query with name "/contact/name?name=${name.type.String}"
 router.route("/name")
     .get(async (req, res) => {
         try {
@@ -83,12 +84,14 @@ router.route("/name")
         };
     });
 
+// Query with category "/contact/category?category=${category.type.Number}"
 router.route("/category")
     .get(async (req, res) => {
         try {
+            const categoryNumber = req.query.category;
             const data = await Contact.aggregate([
                 {
-                    $match: { category: { $eq: req.query.category } },
+                    $match: { category: { $eq: { categoryNumber } } }, // Problème avec le req.query.category
                 },
             ]);
 
