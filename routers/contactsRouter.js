@@ -1,3 +1,4 @@
+const { query } = require("express");
 const express = require("express");
 const router = express.Router();
 // Import models
@@ -68,17 +69,12 @@ router.route("/:id")
 router.route("/name")
     .get(async (req, res) => {
         try {
-            const data = { name: "Etienne" };
-            const complet = data.name.substring(0, 1).toLocaleLowerCase() + data.name.substring(1)
-            const match = await Contact.aggregate([
-                {
-                    $match: { name: complet },
-                },
-            ]);
-
-            console.log(match)
+            const name = req.query.name;
+            const fullName = name.substring(0, 1).toUpperCase() + name.substring(1);
+            const data = await Contact.findOne({ name: fullName })
 
             res.status(200).json({
+                message: "Ok",
                 data: data,
             });
         } catch (error) {

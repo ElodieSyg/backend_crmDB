@@ -9,7 +9,7 @@ router.route("/")
         const { email, password } = req.body;
 
         const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-        const passwordRegex = new RegExp(/[0-9a-zA-Z]{8,}/);
+        const passwordRegex = new RegExp(/[0-9a-zA-Z]{6,}/);
 
         if (emailRegex.test(email) && passwordRegex.test(password)) {
             try {
