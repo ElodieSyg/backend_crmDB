@@ -87,8 +87,15 @@ router.route("/name")
 // Query with category "/contact/category?category=${category.type.Number}"
 router.route("/category")
     .get(async (req, res) => {
+        const categoryNumber = parseInt(req.query.category);
+
+        if (categoryNumber < 1 || categoryNumber > 5) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        };
+
         try {
-            const categoryNumber = parseInt(req.query.category);
             const data = await Contact.aggregate([
                 {
                     $match: {
@@ -111,10 +118,19 @@ router.route("/category")
 
 router.route("/email")
     .get(async (req, res) => {
+        const email = req.query.email;
+        const emailDatabase = await Contact.findOne({ email: req.query.email });
+
+        if (!emailDatabase) {
+            return res.status(404).json({
+                message: "Email does not exist",
+            });
+        };
+
         try {
             const data = await Contact.aggregate([
                 {
-                    $match: { email: req.query.email }
+                    $match: { email: { $eq: email } },
                 },
             ]);
 
