@@ -11,6 +11,7 @@ const debug = require("./middlewares/debug");
 const registerRouter = require("./routers/registerRouter");
 const loginRouter = require("./routers/loginRouter");
 const contactRouter = require("./routers/contactsRouter");
+const logoutRouter = require("./routers/logoutRouter");
 
 // MongoDB connection
 mongoose
@@ -27,6 +28,7 @@ app.use(debug);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/contacts", contactRouter);
+app.use("/logout", logoutRouter);
 
 // Starting server
 app.listen(process.env.PORT, () => {
