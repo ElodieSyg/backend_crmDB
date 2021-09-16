@@ -68,11 +68,16 @@ router.route("/:id")
 router.route("/name")
     .get(async (req, res) => {
         try {
+            const name = req.query.name
+
             const data = await Contact.aggregate([
                 {
-                    $match: { name: req.params.name },
+                    $match: { name: { $eq: name } },
                 },
             ]);
+
+
+            console.log(req.query.name, data)
 
             res.status(200).json({
                 data,
@@ -88,12 +93,16 @@ router.route("/name")
 router.route("/category")
     .get(async (req, res) => {
         try {
-            const categoryNumber = req.query.category;
+            const categoryNumber = parseInt(req.query.category);
             const data = await Contact.aggregate([
                 {
-                    $match: { category: { $eq: { categoryNumber } } }, // Problème avec le req.query.category
-                },
+                    $match: {
+                        category: { $eq: categoryNumber }, // Problème avec le req.query.category
+                    },
+                }
             ]);
+
+            console.log(categoryNumber, data)
 
             res.status(200).json({
                 data: data,
