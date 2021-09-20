@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const JWT = require("jsonwebtoken");
 const router = express.Router();
 // Import models
 const User = require("../models/usersModel");
@@ -8,7 +8,7 @@ const User = require("../models/usersModel");
 const protect = require("../middlewares/protect");
 
 router.route("/")
-    .post(async (req, res) => {
+    .post(async (req, res) => { // Give token to user
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -19,7 +19,7 @@ router.route("/")
             });
         };
 
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         res.cookie("jwt", token, { httpOnly: true, secure: false });
 

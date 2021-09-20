@@ -7,6 +7,7 @@ const User = require("../models/usersModel");
 router.route("/")
     .post(async (req, res) => { // Add an user in database
         const { email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
         const passwordRegex = new RegExp(/[0-9a-zA-Z]{6,}/);
@@ -24,8 +25,6 @@ router.route("/")
                 message: "Incorrect email or password !"
             });
         };
-
-        const hashedPassword = await bcrypt.hash(password, 12);
 
         res.status(201).json({
             message: `User created with email: ${email}`,
