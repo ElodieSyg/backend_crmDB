@@ -5,6 +5,7 @@ dotenv.config({
     path: "./config.env",
 });
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 // Import middlewares
 const debug = require("./middlewares/debug");
 // Import routers
@@ -30,6 +31,7 @@ mongoose
 // Middlewares
 app.use(express.json());
 app.use(debug);
+app.use(cookieParser());
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/contacts", contactRouter);

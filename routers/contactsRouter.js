@@ -7,14 +7,11 @@ const Contact = require("../models/contactModel");
 const protect = require("../middlewares/protect");
 
 router.route("/")
-    .get(protect, async (_req, res) => {
-        const user = req.body;
-        console.log(user)
-        const userId = await Contact.find()
-        const contacts = await Contact.findById().populate("userId");
+    .get(protect, async (req, res) => {
+        const contacts = await Contact.find({ userId: req.cookies.jwtData._id }).populate("userId");
 
         res.status(200).json({
-            message: "Users list",
+            message: "Contact list",
             data: contacts,
         });
     })

@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const JWT = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 // Import models
 const User = require("../models/usersModel");
@@ -19,7 +19,7 @@ router.route("/")
             });
         };
 
-        const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         res.cookie("jwt", token, { httpOnly: true, secure: false });
 
