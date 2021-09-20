@@ -20,6 +20,11 @@ mongoose
     })
     .then(() => {
         console.log("Connected to MongoDB !");
+    })
+    .catch(error => {
+        console.log("Database connection failed");
+        console.log(error);
+        process.exit;
     });
 
 // Middlewares

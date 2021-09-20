@@ -1,12 +1,17 @@
-const { query } = require("express");
 const express = require("express");
+const JWT = require("jsonwebtoken");
 const router = express.Router();
 // Import models
 const Contact = require("../models/contactModel");
+// Import middleware
+const protect = require("../middlewares/protect");
 
 router.route("/")
-    .get(async (_req, res) => {
-        const contacts = await Contact.find().populate("userId");
+    .get(protect, async (_req, res) => {
+        const user = req.body;
+        console.log(user)
+        const userId = await Contact.find()
+        const contacts = await Contact.findById().populate("userId");
 
         res.status(200).json({
             message: "Users list",

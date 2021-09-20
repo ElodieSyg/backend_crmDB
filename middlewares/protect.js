@@ -1,13 +1,15 @@
-const JWT = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
-function protect(req, res, next) {
+const protect = (req, res, next) => { // check pourquoi je rentre toujours dans token is not valid
     try {
-        const data = JWT.verify(req.cookie.jwt, process.env.JWT_SECRET);
-        req.cookie.jwtData = data;
+        const data = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+        console.log(data)
+        req.cookies.jwtData = data;
         next();
-    } catch (error) {
+    } catch (err) {
+        console.log(data)
         return res.status(401).json({
-            message: "Your token is not valid"
+            message: "Your token is not valid",
         });
     };
 };
