@@ -1,5 +1,5 @@
 const express = require("express");
-const JWT = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 // Import models
 const Contact = require("../models/contactModel");
@@ -67,7 +67,6 @@ router.route("/:id")
         });
     });
 
-// Query with name "/contact/name?name=${name.type.String}"
 router.route("/name")
     .get(async (req, res) => {
         try {
@@ -86,7 +85,6 @@ router.route("/name")
         };
     });
 
-// Query with category "/contact/category?category=${category.type.Number}"
 router.route("/category")
     .get(async (req, res) => {
         const categoryNumber = parseInt(req.query.category);

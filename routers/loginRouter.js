@@ -9,23 +9,30 @@ const protect = require("../middlewares/protect");
 
 router.route("/")
     .post(async (req, res) => { // Give token to user
-        const { email, password } = req.body;
+        const { email, password } = req.body; // recupère les infos qui proviennent du front 
         const user = await User.findOne({ email });
-        const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if (!user || !isPasswordValid) {
+        if (user) {
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordValid) {
+                res.status(400).json({
+                    message: "Invalid email or password "
+                });
+            };
+
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+            res.cookie("jwt", token, { httpOnly: true, secure: false });
+
+            res.json({
+                message: "Here is your cookie for subsequent requests !",
+            });
+        } else {
             res.status(400).json({
-                message: "Invalid email or password "
+                message: "User don't exist",
             });
         };
-
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-
-        res.cookie("jwt", token, { httpOnly: true, secure: false });
-
-        res.json({
-            message: "Here is your cookie for subsequent requests !",
-        });
     })
     .get(protect, async (req, res) => {
         console.log("This user come from _id: ", req.cookies.jwtData._id);
