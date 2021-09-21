@@ -6,6 +6,7 @@ dotenv.config({
 });
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 // Import middlewares
 const debug = require("./middlewares/debug");
 // Import routers
@@ -29,6 +30,7 @@ mongoose
     });
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(debug);
 app.use(cookieParser());
